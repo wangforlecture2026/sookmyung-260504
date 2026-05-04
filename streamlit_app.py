@@ -5,9 +5,14 @@ import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
 import numpy as np
+from matplotlib.font_manager import FontProperties
+import os
 
 # 한글 폰트 설정
-plt.rcParams['font.family'] = 'DejaVu Sans'
+font_path = os.path.join(os.path.dirname(__file__), 'fonts/NanumGothic-Bold.ttf')
+font_prop = FontProperties(fname=font_path)
+plt.rcParams['axes.unicode_minus'] = False
+
 sns.set_style("whitegrid")
 
 # 페이지 기본 설정
@@ -24,12 +29,12 @@ skills = ['Python', 'JavaScript', 'Streamlit', 'React', 'SQL']
 proficiency = [85, 75, 90, 70, 80]
 
 ax.barh(skills, proficiency, color=['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8'])
-ax.set_xlabel('숙련도 (%)', fontsize=12)
-ax.set_title('기술 스택별 숙련도', fontsize=14, fontweight='bold')
+ax.set_xlabel('숙련도 (%)', fontsize=12, fontproperties=font_prop)
+ax.set_title('기술 스택별 숙련도', fontsize=14, fontweight='bold', fontproperties=font_prop)
 ax.set_xlim(0, 100)
 
 for i, v in enumerate(proficiency):
-    ax.text(v + 2, i, str(v) + '%', va='center')
+    ax.text(v + 2, i, str(v) + '%', va='center', fontproperties=font_prop)
 
 st.pyplot(fig)
 
@@ -50,12 +55,16 @@ width = 0.35
 sns.barplot(x=x - width/2, y=study_hours, label='학습 시간', color='#45B7D1', ax=ax)
 sns.barplot(x=x + width/2, y=project_hours, label='프로젝트 시간', color='#FF6B6B', ax=ax)
 
-ax.set_xlabel('월', fontsize=12)
-ax.set_ylabel('시간', fontsize=12)
-ax.set_title('월별 학습 및 프로젝트 시간', fontsize=14, fontweight='bold')
+ax.set_xlabel('월', fontsize=12, fontproperties=font_prop)
+ax.set_ylabel('시간', fontsize=12, fontproperties=font_prop)
+ax.set_title('월별 학습 및 프로젝트 시간', fontsize=14, fontweight='bold', fontproperties=font_prop)
 ax.set_xticks(x)
-ax.set_xticklabels(months)
-ax.legend()
+ax.set_xticklabels(months, fontproperties=font_prop)
+
+# 범례 텍스트 한글 처리
+legend = ax.legend()
+for text in legend.get_texts():
+    text.set_fontproperties(font_prop)
 
 st.pyplot(fig)
 
